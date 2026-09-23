@@ -163,7 +163,8 @@ h2.big{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.7rem,3.6vw,2
 
 /* schedule card: the gold and cream scheme, but with the type carrying the contrast.
    Subpixel rendering plus real weight is what makes dark-on-cream look sharp. */
-.card.crisp{background:linear-gradient(180deg,#fdf7ea,#f6ebd4);
+.card.crisp{max-height:94svh;overflow-y:auto;overscroll-behavior:contain;
+  background:linear-gradient(180deg,#fdf7ea,#f6ebd4);
   border:1px solid rgba(122,84,16,.6);
   box-shadow:0 24px 56px rgba(20,10,2,.55), inset 0 0 0 3px rgba(255,255,255,.6);
   -webkit-font-smoothing:auto;-moz-osx-font-smoothing:auto;text-rendering:optimizeLegibility}
@@ -171,26 +172,29 @@ h2.big{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.7rem,3.6vw,2
   font-size:clamp(.74rem,1.6vh,.92rem);letter-spacing:.28em;text-transform:uppercase;
   text-align:center}
 .card.crisp .day{color:#6b4508;font-weight:600;
-  font-size:clamp(.7rem,1.5vh,.86rem);letter-spacing:.2em;
+  font-size:clamp(.66rem,1.35vh,.8rem);letter-spacing:.2em;
+  margin:clamp(8px,1.3vh,14px) 0 5px;padding-bottom:4px;
   border-bottom:1px solid rgba(122,84,16,.35)}
 .card.crisp .tl li{border-left:1px solid rgba(122,84,16,.35)}
 .card.crisp .tl li::before{background:#8a5c0c;box-shadow:0 0 0 3px #fbf3e2}
-.card.crisp .tl h4{color:#241407;font-weight:600;font-size:clamp(.98rem,2.1vh,1.26rem)}
-.card.crisp .tl .at{color:#7a5410;font-weight:600;font-size:clamp(.9rem,1.9vh,1.12rem)}
+.card.crisp .tl h4{color:#241407;font-weight:600;font-size:clamp(.92rem,1.9vh,1.14rem)}
+.card.crisp .tl .at{color:#7a5410;font-weight:600;font-size:clamp(.86rem,1.75vh,1.02rem)}
 .card.crisp .tl .at::before{content:" \00b7 "}
 .card.crisp .tl p{color:#3b2c17;font-style:normal;
-  font-size:clamp(.86rem,1.76vh,1.04rem);line-height:1.5;margin-top:4px}
-.card.crisp .here{color:#4a3a22;font-size:clamp(.8rem,1.62vh,.95rem);line-height:1.45;
-  margin-top:5px}
-.card.crisp a.here.map{display:inline-block;margin-top:4px;min-height:34px;line-height:34px;
+  font-size:clamp(.82rem,1.6vh,.97rem);line-height:1.42;margin-top:2px}
+.card.crisp .here{color:#4a3a22;font-size:clamp(.78rem,1.5vh,.9rem);line-height:1.38;
+  margin-top:3px}
+.card.crisp a.here.map{display:inline-block;margin-top:2px;min-height:28px;line-height:28px;
   font-family:"Cinzel",serif;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
   font-size:clamp(.62rem,1.3vh,.74rem);color:#6b4508;text-decoration:none}
 .card.crisp a.here.map span{border-bottom:1px solid rgba(107,69,8,.7);padding-bottom:2px}
 .card.crisp .venue{color:#6b4508;font-family:"Cinzel",serif;font-weight:600;
   font-size:clamp(.74rem,1.55vh,.9rem);letter-spacing:.24em;text-transform:uppercase}
-.card.crisp .addr{color:#3b2c17;font-size:clamp(.88rem,1.8vh,1.06rem);line-height:1.55}
+.card.crisp .addr{color:#3b2c17;font-size:clamp(.82rem,1.6vh,.96rem);line-height:1.4}
 .card.crisp a{color:#6b4508}
 .card.crisp a span{border-bottom:1px solid rgba(107,69,8,.75)}
+.card.crisp::-webkit-scrollbar{width:5px}
+.card.crisp::-webkit-scrollbar-thumb{background:rgba(122,84,16,.35);border-radius:3px}
 
 /* speech bubbles on the wedding-day photo */
 .bubble{position:absolute;pointer-events:auto;
@@ -246,7 +250,7 @@ h2.big{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.7rem,3.6vw,2
   text-transform:uppercase;color:#7a5410;margin:clamp(12px,2vh,20px) 0 8px;text-align:left;
   padding-bottom:5px;border-bottom:1px solid rgba(168,118,26,.28)}
 .tl{list-style:none;text-align:left}
-.tl li{position:relative;padding:0 0 clamp(9px,1.6vh,15px) 22px;
+.tl li{position:relative;padding:0 0 clamp(6px,1.1vh,11px) 20px;
   border-left:1px solid rgba(168,118,26,.3)}
 .tl li:last-child{padding-bottom:0}
 .tl li::before{content:"";position:absolute;left:-4px;top:8px;width:6px;height:6px;
@@ -627,8 +631,8 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
     <div class="veil top"></div><div class="veil bottom"></div>
     <div class="tint" style="background:linear-gradient(180deg,#f6e8ca,#e9d6ae)"></div>
     <div class="hold"><div class="inner">
-      <div class="card crisp rv" style="max-width:min(540px,93%);margin:0 auto;text-align:left;
-                                        padding:clamp(20px,2.8vh,32px) clamp(20px,2.8vw,34px)">
+      <div class="card crisp rv" style="max-width:min(620px,94%);margin:0 auto;text-align:left;
+                                        padding:clamp(14px,2vh,24px) clamp(18px,2.4vw,30px)">
         <p class="head rv">Three days of us</p>
         <div class="rule"><i class="dia"></i></div>
 
@@ -666,15 +670,15 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
             <a class="here map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=W8VV%2BH3C%20Kalikotta%20Palace%20Rd%2C%20Kottakakom%2C%20Thrippunithura%2C%20Ernakulam%2C%20Kerala%20682301"><span>Open in Maps</span></a></li>
         </ul>
 
-        <div class="rv d5" style="text-align:center;margin-top:clamp(12px,1.8vh,18px)">
-          <div class="rule"><i class="dia"></i></div>
+        <div class="rv d5" style="text-align:center;margin-top:clamp(8px,1.2vh,14px)">
+          <div class="rule" style="margin:8px 0"><i class="dia"></i></div>
           <p class="venue">Royal Resortica</p>
-          <p class="addr" style="margin-top:7px">
+          <p class="addr" style="margin-top:4px">
             Khasra No. 45&ndash;46, Bakshi Ka Talab, near Bright Land School,<br>
             Chak Ganja Giri, Chandralok, Lucknow, Uttar Pradesh 226201
           </p>
           <a class="head" target="_blank" rel="noopener"
-             style="display:inline-block;min-height:44px;line-height:44px;text-decoration:none"
+             style="display:inline-block;min-height:34px;line-height:34px;text-decoration:none"
              href="https://www.google.com/maps/search/?api=1&query=Royal%20Resortica%20Bakshi%20Ka%20Talab%20Lucknow">
              <span>Open in Maps</span></a>
         </div>
