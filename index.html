@@ -182,6 +182,19 @@ h2.big{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.7rem,3.6vw,2
 .card.crisp .tl .at::before{content:" \00b7 "}
 .card.crisp .tl p{color:#3b2c17;font-style:normal;
   font-size:clamp(.82rem,1.6vh,.97rem);line-height:1.42;margin-top:2px}
+/* The schedule outgrew one column once Kerala was added, so on anything wider
+   than a phone the four days run in two columns. Half the height, nothing cut. */
+.card.crisp{width:min(840px,94%);margin:0 auto;text-align:left;
+  padding:clamp(14px,2vh,24px) clamp(18px,2.2vw,28px)}
+.days{column-count:2;column-gap:clamp(20px,2.4vw,34px);
+  column-rule:1px solid rgba(122,84,16,.18)}
+.dayblock{break-inside:avoid;-webkit-column-break-inside:avoid;page-break-inside:avoid;
+  display:inline-block;width:100%}
+.dayblock .day{margin-top:0}
+.dayblock + .dayblock .day{margin-top:clamp(10px,1.5vh,16px)}
+.foot{text-align:center;margin-top:clamp(8px,1.2vh,14px)}
+@media (max-width: 860px){ .days{column-count:1;column-rule:none} }
+
 .card.crisp .here{color:#4a3a22;font-size:clamp(.78rem,1.5vh,.9rem);line-height:1.38;
   margin-top:3px}
 .card.crisp a.here.map{display:inline-block;margin-top:2px;min-height:28px;line-height:28px;
@@ -325,6 +338,7 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
   .fs{font-size:clamp(.95rem,4vw,1.1rem)}
 
   .card,.panelbox{max-width:94%!important;padding:17px 15px!important}
+  .card.crisp{width:94%!important}
   .lineage{font-size:.9rem;line-height:1.7}
 
   /* schedule: tighter so all six events and the venue still fit one screen */
@@ -631,55 +645,63 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
     <div class="veil top"></div><div class="veil bottom"></div>
     <div class="tint" style="background:linear-gradient(180deg,#f6e8ca,#e9d6ae)"></div>
     <div class="hold"><div class="inner">
-      <div class="card crisp rv" style="max-width:min(620px,94%);margin:0 auto;text-align:left;
-                                        padding:clamp(14px,2vh,24px) clamp(18px,2.4vw,30px)">
+      <div class="card crisp rv">
         <p class="head rv">Three days of us</p>
         <div class="rule"><i class="dia"></i></div>
 
-        <h3 class="day rv d1" style="margin-top:0">13 February &middot; Saturday</h3>
-        <ul class="tl">
-          <li class="rv d1"><h4>Mehndi</h4><span class="at">1:30 pm</span>
-            <p>Fun, relaxed pre-wedding rituals where guests apply intricate henna art.</p></li>
-          <li class="rv d1"><h4>Sundar Kand &amp; Mata Ki Chowki</h4><span class="at">6:00 pm</span>
-            <p>Devotional singing and prayer, hosted to seek divine blessings.</p></li>
-        </ul>
+        <div class="days">
+          <div class="dayblock rv d1">
+            <h3 class="day">13 February &middot; Saturday</h3>
+            <ul class="tl">
+              <li><h4>Mehndi</h4><span class="at">1:30 pm</span>
+                <p>Fun, relaxed pre-wedding rituals where guests apply intricate henna art.</p></li>
+              <li><h4>Sundar Kand &amp; Mata Ki Chowki</h4><span class="at">6:00 pm</span>
+                <p>Devotional singing and prayer, hosted to seek divine blessings.</p></li>
+            </ul>
+          </div>
 
-        <h3 class="day rv d2">14 February &middot; Sunday</h3>
-        <ul class="tl">
-          <li class="rv d2"><h4>Haldi</h4><span class="at">11:00 am</span>
-            <p>Warm turmeric paste applied to bless the couple with good luck and radiant skin.</p></li>
-          <li class="rv d2"><h4>Sangeet</h4><span class="at">6:30 pm</span>
-            <p>A lively, festive night of music, Bollywood and Mollywood dancing,
-               and performances by family and friends.</p></li>
-        </ul>
+          <div class="dayblock rv d2">
+            <h3 class="day">14 February &middot; Sunday</h3>
+            <ul class="tl">
+              <li><h4>Haldi</h4><span class="at">11:00 am</span>
+                <p>Warm turmeric paste applied to bless the couple with good luck and radiant skin.</p></li>
+              <li><h4>Sangeet</h4><span class="at">6:30 pm</span>
+                <p>A lively, festive night of music, Bollywood and Mollywood dancing,
+                   and performances by family and friends.</p></li>
+            </ul>
+          </div>
 
-        <h3 class="day rv d3">15 February &middot; Monday</h3>
-        <ul class="tl">
-          <li class="rv d3"><h4>Wedding &amp; Vidai</h4><span class="at">12:30 am</span>
-            <p>The main ceremony, where sacred vows are exchanged around a holy fire.</p></li>
-          <li class="rv d3"><h4>Gala Reception</h4><span class="at">7:00 pm</span>
-            <p>An elegant evening dinner and party to celebrate the newlyweds.</p></li>
-        </ul>
+          <div class="dayblock rv d3">
+            <h3 class="day">15 February &middot; Monday</h3>
+            <ul class="tl">
+              <li><h4>Wedding &amp; Vidai</h4><span class="at">12:30 am</span>
+                <p>The main ceremony, where sacred vows are exchanged around a holy fire.</p></li>
+              <li><h4>Gala Reception</h4><span class="at">7:00 pm</span>
+                <p>An elegant evening dinner and party to celebrate the newlyweds.</p></li>
+            </ul>
+          </div>
 
-        <h3 class="day rv d4">19 February &middot; Friday</h3>
-        <ul class="tl">
-          <li class="rv d4"><h4>Reception at the Groom&rsquo;s Home, Kerala</h4><span class="at">Afternoon</span>
-            <p>An afternoon with the newlyweds, exchanging gifts and blessings.</p>
-            <p class="here">Kalikotta Palace Rd, Kottakakom, Thrippunithura,<br>
-               Ernakulam, Kerala 682301</p>
-            <a class="here map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=W8VV%2BH3C%20Kalikotta%20Palace%20Rd%2C%20Kottakakom%2C%20Thrippunithura%2C%20Ernakulam%2C%20Kerala%20682301"><span>Open in Maps</span></a></li>
-        </ul>
+          <div class="dayblock rv d4">
+            <h3 class="day">19 February &middot; Friday</h3>
+            <ul class="tl">
+              <li><h4>Reception at the Groom&rsquo;s Home, Kerala</h4><span class="at">Afternoon</span>
+                <p>An afternoon with the newlyweds, exchanging gifts and blessings.</p>
+                <p class="here">Kalikotta Palace Rd, Kottakakom, Thrippunithura,<br>
+                   Ernakulam, Kerala 682301</p>
+                <a class="here map" target="_blank" rel="noopener"
+                   href="https://www.google.com/maps/search/?api=1&amp;query=W8VV%2BH3C%20Kalikotta%20Palace%20Rd%2C%20Kottakakom%2C%20Thrippunithura%2C%20Ernakulam%2C%20Kerala%20682301"><span>Open in Maps</span></a></li>
+            </ul>
+          </div>
+        </div>
 
-        <div class="rv d5" style="text-align:center;margin-top:clamp(8px,1.2vh,14px)">
-          <div class="rule" style="margin:8px 0"><i class="dia"></i></div>
+        <div class="rv d5 foot">
+          <div class="rule"><i class="dia"></i></div>
           <p class="venue">Royal Resortica</p>
-          <p class="addr" style="margin-top:4px">
-            Khasra No. 45&ndash;46, Bakshi Ka Talab, near Bright Land School,<br>
-            Chak Ganja Giri, Chandralok, Lucknow, Uttar Pradesh 226201
-          </p>
+          <p class="addr">Khasra No. 45&ndash;46, Bakshi Ka Talab, near Bright Land School,<br>
+            Chak Ganja Giri, Chandralok, Lucknow, Uttar Pradesh 226201</p>
           <a class="head" target="_blank" rel="noopener"
-             style="display:inline-block;min-height:34px;line-height:34px;text-decoration:none"
-             href="https://www.google.com/maps/search/?api=1&query=Royal%20Resortica%20Bakshi%20Ka%20Talab%20Lucknow">
+             style="display:inline-block;min-height:32px;line-height:32px;text-decoration:none"
+             href="https://www.google.com/maps/search/?api=1&amp;query=Royal%20Resortica%20Bakshi%20Ka%20Talab%20Lucknow">
              <span>Open in Maps</span></a>
         </div>
       </div>
