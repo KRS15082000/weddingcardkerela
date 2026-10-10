@@ -228,6 +228,12 @@ h2.big{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.7rem,3.6vw,2
 .lineage{font-family:"Cormorant Garamond",serif;color:var(--deep);
   font-size:clamp(.88rem,1.15vw,1.06rem);line-height:1.75;margin-top:10px;
   text-wrap:balance}
+/* grouped family lines: small gold label over each pair of names */
+.lineage.kin{line-height:1.35}
+.lineage.kin p{margin:0}
+.lineage.kin p + p{margin-top:9px;padding-top:9px;border-top:1px solid rgba(168,118,26,.22)}
+.kin-l{display:block;font-family:"Cinzel",serif;font-size:.56rem;letter-spacing:.2em;
+  text-transform:uppercase;color:#a8761a;margin-bottom:2px}
 .mantra{font-family:"Tiro Devanagari Hindi","Noto Serif Devanagari","Nirmala UI",serif;
   font-weight:400;font-size:clamp(1.45rem,4.2vh,2.85rem);line-height:1.75;letter-spacing:.015em}
 /* soft shade so white type holds against the open sky */
@@ -372,6 +378,9 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
   [data-label="Bride and groom"] .card{max-width:78%!important;padding:14px 13px!important}
   [data-label="Bride and groom"] .name{font-size:1.25rem!important}
   [data-label="Bride and groom"] .lineage{font-size:.8rem;line-height:1.65;margin-top:7px}
+  [data-label="Bride and groom"] .lineage.kin{line-height:1.3}
+  [data-label="Bride and groom"] .lineage.kin p + p{margin-top:6px;padding-top:6px}
+  [data-label="Bride and groom"] .kin-l{font-size:.5rem;letter-spacing:.16em}
   [data-label="Bride and groom"] .rule{margin:8px 0}
   [data-label="Bride and groom"] .rule::before,
   [data-label="Bride and groom"] .rule::after{width:28px}
@@ -631,9 +640,14 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
         <p class="eyebrow gold">The Groom</p>
         <div class="rule"><i class="dia"></i></div>
         <h2 class="name gold" style="font-size:clamp(1.4rem,2.6vw,2rem)">Jairam</h2>
-        <p class="lineage">Grand S/O Late Smt Lakshmi Ammal &amp; Late Sri Rama Vadhyar<br>
-          Grand S/O Late Smt K V Rajammal &amp; Late Sri R Parameswaran<br>
-          S/O Late P Uma Sankar &amp; KR Sankar</p>
+        <div class="lineage kin">
+          <p><span class="kin-l">Paternal Grandparents</span>
+            Late Smt Lakshmi Ammal &amp; Late Sri Rama Vadhyar</p>
+          <p><span class="kin-l">Maternal Grandparents</span>
+            Late Smt K V Rajammal &amp; Late Sri R Parameswaran</p>
+          <p><span class="kin-l">Son of</span>
+            Late P Uma Sankar &amp; KR Sankar</p>
+        </div>
       </div>
     </div></div>
   </div>
