@@ -378,17 +378,26 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
   /* countdown: title was straddling the top edge of the artwork */
   [data-label="Counting the days"] .inner{--y:38%}
 
-  /* bride and groom: cards were spilling over the painted pillars either side */
-  [data-label="Bride and groom"] .card{max-width:78%!important;padding:14px 13px!important}
-  [data-label="Bride and groom"] .name{font-size:1.25rem!important}
-  [data-label="Bride and groom"] .lineage{font-size:.8rem;line-height:1.65;margin-top:7px}
-  [data-label="Bride and groom"] .inner{--y:51%}
-  [data-label="Bride and groom"] .lineage.kin{line-height:1.3}
-  [data-label="Bride and groom"] .lineage.kin p + p{margin-top:6px;padding-top:6px}
-  [data-label="Bride and groom"] .kin-l{font-size:.5rem;letter-spacing:.16em}
-  [data-label="Bride and groom"] .rule{margin:8px 0}
+  /* bride and groom: on a phone the temple painting only fills the middle of
+     the screen, so the text box is shrunk to exactly the painting and every
+     size is tied to its height. Both cards then sit inside the artwork on any
+     phone, small or tall, instead of spilling into the blurred band. */
+  [data-label="Bride and groom"] .hold{height:min(100svh, calc(100vw / var(--ar)));
+    container-type:size}
+  [data-label="Bride and groom"] .inner{--y:50%;padding:0 4%;
+    font-size:clamp(10px, 2.75cqh, 16px)}
+  [data-label="Bride and groom"] .card{max-width:84%!important;
+    padding:.85em .8em .95em!important;margin:0 auto!important}
+  [data-label="Bride and groom"] .eyebrow{font-size:.66em;letter-spacing:.24em}
+  [data-label="Bride and groom"] p.eyebrow.d2{margin:.55em 0!important}
+  [data-label="Bride and groom"] .name{font-size:1.5em!important;line-height:1.15}
+  [data-label="Bride and groom"] .rule{margin:.4em 0}
   [data-label="Bride and groom"] .rule::before,
-  [data-label="Bride and groom"] .rule::after{width:28px}
+  [data-label="Bride and groom"] .rule::after{width:26px}
+  [data-label="Bride and groom"] .lineage{font-size:.9em;margin-top:.45em}
+  [data-label="Bride and groom"] .lineage.kin{line-height:1.22}
+  [data-label="Bride and groom"] .lineage.kin p + p{margin-top:.38em;padding-top:.38em}
+  [data-label="Bride and groom"] .kin-l{font-size:.6em;letter-spacing:.16em;margin-bottom:.1em}
 
   .dl b{font-size:1.1rem}
   .dl .sep{height:30px}
@@ -845,29 +854,27 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
     var card = p.querySelector('.card.crisp');
     if(card) tall.push({p:p, stick:p.querySelector('.stick'), card:card, extra:0, travel:0});
   });
+  /* sizes come from the sticky box (small viewport height), not innerHeight,
+     so the address bar sliding away on a phone does not make things jump */
   function measure(){
-    var vh = innerHeight;
     tall.forEach(function(t){
-      var sh = t.stick.clientHeight || vh;
+      var sh = t.stick.clientHeight || innerHeight;
       t.extra = Math.max(0, t.card.offsetHeight - sh + PAD*2);
-      if(t.extra > 0){
-        t.travel = t.extra + vh*0.5;
-        t.p.style.height = (vh + t.travel) + 'px';
-      } else {
-        t.travel = 0;
-        t.p.style.height = '';
-      }
+      t.p.style.height = t.extra > 0 ? (sh*1.5 + t.extra) + 'px' : '';
     });
   }
+  /* returns how far to shift the card, and where its fade out should begin */
   function glide(p, pin){
     for(var k=0;k<tall.length;k++){
       var t = tall[k];
       if(t.p !== p || t.extra <= 0) continue;
-      var moved = clamp(pin * t.travel, 0, t.extra);
-      return t.extra/2 - moved;
+      var dist = Math.max(1, p.offsetHeight - innerHeight);
+      var moved = clamp(pin * dist, 0, t.extra);
+      return { shift: t.extra/2 - moved, fadeAt: Math.min(0.94, (t.extra + innerHeight*0.3) / dist) };
     }
-    return 0;
+    return { shift: 0, fadeAt: 0.86 };
   }
+  var lastW = innerWidth;
   measure();
   if('ResizeObserver' in window){
     var ro = new ResizeObserver(function(){ measure(); frame(); });
@@ -896,10 +903,10 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
       /* reveal once pinned, fade out just before the next panel wipes over */
       if(enter < 0.35) p.classList.add('in'); else p.classList.remove('in');
       if(hold){
-        var out = pin > 0.86 ? (pin - 0.86) / 0.14 : 0;
+        var g = glide(p, pin);
+        var out = pin > g.fadeAt ? clamp((pin - g.fadeAt) / (1 - g.fadeAt), 0, 1) : 0;
         hold.style.opacity = 1 - out;
-        var shift = glide(p, pin);
-        hold.style.transform = 'translate3d(0,'+(shift - (reduce ? 0 : out*22)).toFixed(1)+'px,0)';
+        hold.style.transform = 'translate3d(0,'+(g.shift - (reduce ? 0 : out*22)).toFixed(1)+'px,0)';
       }
     });
     dotEls.forEach(function(d,i){ d.setAttribute('aria-current', i===active ? 'true':'false'); });
@@ -910,7 +917,12 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
     else setTimeout(prefetchAll, 2500);
   });
   addEventListener('scroll', function(){ if(!ticking){ ticking=true; requestAnimationFrame(frame); } }, {passive:true});
-  addEventListener('resize', function(){ measure(); frame(); });
+  /* phones fire resize whenever the address bar shows or hides; only a real
+     width change (rotation, desktop window) needs the heights recalculated */
+  addEventListener('resize', function(){
+    if(innerWidth !== lastW){ lastW = innerWidth; measure(); }
+    frame();
+  });
   frame();
 
   /* background music: starts on its own, quietly, and unmutes at the first touch */
