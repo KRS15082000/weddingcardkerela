@@ -231,6 +231,10 @@ h2.big{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.7rem,3.6vw,2
 .lineage{font-family:"Cormorant Garamond",serif;color:var(--deep);
   font-size:clamp(.88rem,1.15vw,1.06rem);line-height:1.75;margin-top:10px;
   text-wrap:balance}
+/* invitation wording on page two */
+.invite{font-size:clamp(1rem,1.5vw,1.36rem);line-height:1.8;text-wrap:balance}
+.invite p{margin:0}
+.invite p + p{margin-top:.75em}
 /* grouped family lines: small gold label over each pair of names */
 .lineage.kin{line-height:1.35}
 .lineage.kin p{margin:0}
@@ -620,14 +624,12 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
     <div class="hold"><div class="inner">
       <div class="panelbox rv" style="max-width:min(600px,90%)">
         <div class="rule" style="margin-top:0"><i class="dia"></i></div>
-        <p class="script rv d1" style="color:#3a1a0a;font-size:clamp(1rem,1.5vw,1.36rem);line-height:1.95">
-          We would be so grateful to have you witness our journey.<br>
-          Ours is a love rooted in the sacred waters of Banaras<br>
-          and the calm rivers of Kerala, one that blossomed<br>
-          under the emerald skies of Ireland.<br>
-          With the blessings of God and our families,<br>
-          please join us as we begin this new chapter.
-        </p>
+        <div class="script invite rv d1" style="color:#3a1a0a">
+          <p>With the blessings of the Almighty and our beloved families,
+             we invite you to witness the beginning of our forever.</p>
+          <p>A love born in the ghats of Banaras, nurtured by the backwaters of Kerala,
+             and blossomed beneath the emerald skies of Ireland.</p>
+        </div>
         <div class="rule rv d2"><i class="dia"></i></div>
         <p class="eyebrow rv d2" style="color:#5a3405;font-weight:600;
            font-size:clamp(.72rem,1.2vw,.95rem)">Vartika &nbsp;&middot;&nbsp; Jairam</p>
@@ -875,12 +877,69 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
     return { shift: 0, fadeAt: 0.86 };
   }
   var lastW = innerWidth;
-  measure();
+
+  /* Fit check for every other page. Phones can enlarge text through their own
+     settings (Android font size, Chrome text scaling), which grows the words
+     but not the picture behind them. So each text block is measured against
+     the space it has, and if it would spill past it, it is scaled down just
+     enough to fit. When it already fits, nothing changes. */
+  var MARGIN = 12;
+  var fits = panels.filter(function(p){ return !p.querySelector('.card.crisp'); }).map(function(p){
+    var art = p.querySelector('.art'), f = { hold: p.querySelector('.hold'), inner: p.querySelector('.hold .inner'), ar: 0 };
+    /* the painting's own shape: on a phone it is shown whole in the middle of the
+       screen, so that box (not the whole screen) is the space text must stay in */
+    var src = art && (art.getAttribute('data-src') || ((art.getAttribute('style')||'').match(/url\(['"]?([^'")]+)/)||[])[1]);
+    if(src){ var im = new Image(); im.onload = function(){ f.ar = im.naturalWidth / im.naturalHeight; fitAll(); }; im.src = src; }
+    return f;
+  }).filter(function(f){ return f.hold && f.inner; });
+  var phone = matchMedia('(max-width: 760px)');
+  var canZoom = 'zoom' in document.documentElement.style;
+  function fitAll(){
+    fits.forEach(function(f){
+      var kids = [].slice.call(f.inner.children);
+      kids.forEach(function(k){ k.style.zoom = ''; k.style.transformOrigin = ''; k.style.scale = ''; });
+      var H = f.hold.clientHeight;
+      if(!H) return;
+      var cs = getComputedStyle(f.inner);
+      var top = parseFloat(cs.top) || H/2;
+      var pad = (parseFloat(cs.paddingTop)||0) + (parseFloat(cs.paddingBottom)||0);
+      var lo = 0, hi = H;
+      if(phone.matches && f.ar){
+        var P = Math.min(H, f.hold.clientWidth / f.ar);
+        lo = (H - P) / 2; hi = (H + P) / 2;
+      }
+      var avail = 2 * Math.min(top - lo, hi - top) - MARGIN*2 - pad;
+      var need = f.inner.offsetHeight - pad;
+      if(need <= avail || need <= 0) return;
+      var z = Math.max(0.55, avail / need);
+      kids.forEach(function(k){
+        if(canZoom) k.style.zoom = z.toFixed(3);
+        else { k.style.scale = z.toFixed(3); k.style.transformOrigin = '50% 50%'; }
+      });
+      /* a second pass catches rounding once the lines have re-wrapped */
+      var again = f.inner.offsetHeight - pad;
+      if(canZoom && again > avail) kids.forEach(function(k){ k.style.zoom = (z * avail / again).toFixed(3); });
+    });
+  }
+  function relayout(){ fitAll(); measure(); frame(); }
+  fitAll(); measure();
   if('ResizeObserver' in window){
     var ro = new ResizeObserver(function(){ measure(); frame(); });
     tall.forEach(function(t){ ro.observe(t.card); });
+    var lastH = {};
+    var ro2 = new ResizeObserver(function(entries){
+      var changed = entries.some(function(e){
+        var k = fits.indexOf(fits.filter(function(f){ return f.hold === e.target; })[0]);
+        var h = Math.round(e.contentRect.height);
+        if(lastH[k] === h) return false; lastH[k] = h; return true;
+      });
+      if(changed) fitAll();
+    });
+    fits.forEach(function(f){ ro2.observe(f.hold); });
   }
-  if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ measure(); frame(); });
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
+  addEventListener('load', relayout);
+
 
   function frame(){
     ticking = false;
@@ -920,7 +979,7 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
   /* phones fire resize whenever the address bar shows or hides; only a real
      width change (rotation, desktop window) needs the heights recalculated */
   addEventListener('resize', function(){
-    if(innerWidth !== lastW){ lastW = innerWidth; measure(); }
+    if(innerWidth !== lastW){ lastW = innerWidth; fitAll(); measure(); }
     frame();
   });
   frame();
