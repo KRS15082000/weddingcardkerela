@@ -231,6 +231,7 @@ h2.big{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.7rem,3.6vw,2
 /* grouped family lines: small gold label over each pair of names */
 .lineage.kin{line-height:1.35}
 .lineage.kin p{margin:0}
+.lineage.kin .nw{white-space:nowrap}
 .lineage.kin p + p{margin-top:9px;padding-top:9px;border-top:1px solid rgba(168,118,26,.22)}
 .kin-l{display:block;font-family:"Cinzel",serif;font-size:.56rem;letter-spacing:.2em;
   text-transform:uppercase;color:#a8761a;margin-bottom:2px}
@@ -378,6 +379,7 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
   [data-label="Bride and groom"] .card{max-width:78%!important;padding:14px 13px!important}
   [data-label="Bride and groom"] .name{font-size:1.25rem!important}
   [data-label="Bride and groom"] .lineage{font-size:.8rem;line-height:1.65;margin-top:7px}
+  [data-label="Bride and groom"] .inner{--y:51%}
   [data-label="Bride and groom"] .lineage.kin{line-height:1.3}
   [data-label="Bride and groom"] .lineage.kin p + p{margin-top:6px;padding-top:6px}
   [data-label="Bride and groom"] .kin-l{font-size:.5rem;letter-spacing:.16em}
@@ -632,8 +634,14 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
         <p class="eyebrow gold">The Bride</p>
         <div class="rule"><i class="dia"></i></div>
         <h2 class="name gold" style="font-size:clamp(1.4rem,2.6vw,2rem)">Vartika</h2>
-        <p class="lineage">Grand D/O Smt. Tara Devi &amp; Bashistha Narayan Singh<br>
-          D/O Ragini Singh &amp; Jayant Singh</p>
+        <div class="lineage kin">
+          <p><span class="kin-l">Paternal Grandparents</span>
+            <span class="nw">Smt Tara Devi</span> <span class="nw">&amp; Bashistha Narayan Singh</span></p>
+          <p><span class="kin-l">Maternal Grandparents</span>
+            <span class="nw">Late Smt Nirmala Devi</span> <span class="nw">&amp; Late Karuna Kant Singh</span></p>
+          <p><span class="kin-l">Daughter of</span>
+            <span class="nw">Ragini Singh</span> <span class="nw">&amp; Jayant Singh</span></p>
+        </div>
       </div>
       <p class="eyebrow gold rv d2" style="margin:14px 0">with</p>
       <div class="card rv d3" style="max-width:min(430px,90%);margin:0 auto">
@@ -642,11 +650,11 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
         <h2 class="name gold" style="font-size:clamp(1.4rem,2.6vw,2rem)">Jairam</h2>
         <div class="lineage kin">
           <p><span class="kin-l">Paternal Grandparents</span>
-            Late Smt Lakshmi Ammal &amp; Late Sri Rama Vadhyar</p>
+            <span class="nw">Late Smt Lakshmi Ammal</span> <span class="nw">&amp; Late Sri Rama Vadhyar</span></p>
           <p><span class="kin-l">Maternal Grandparents</span>
-            Late Smt K V Rajammal &amp; Late Sri R Parameswaran</p>
+            <span class="nw">Late Smt K V Rajammal</span> <span class="nw">&amp; Late Sri R Parameswaran</span></p>
           <p><span class="kin-l">Son of</span>
-            Late P Uma Sankar &amp; KR Sankar</p>
+            <span class="nw">Late P Uma Sankar</span> <span class="nw">&amp; KR Sankar</span></p>
         </div>
       </div>
     </div></div>
@@ -700,7 +708,7 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
             <h3 class="day">19 February &middot; Friday</h3>
             <ul class="tl">
               <li><h4>Reception at the Groom&rsquo;s Home, Kerala</h4><span class="at">Afternoon</span>
-                <p>An afternoon with the newlyweds, exchanging gifts and blessings.</p>
+                <p>An afternoon with the newlyweds, surrounded by family, friends and blessings.</p>
                 <p class="here">Kalikotta Palace Rd, Kottakakom, Thrippunithura,<br>
                    Ernakulam, Kerala 682301</p>
                 <a class="here map" target="_blank" rel="noopener"
