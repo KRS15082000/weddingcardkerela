@@ -206,6 +206,9 @@ h2.big{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(1.7rem,3.6vw,2
 .card.crisp .addr{color:#3b2c17;font-size:clamp(.82rem,1.6vh,.96rem);line-height:1.4}
 .card.crisp a{color:#6b4508}
 .card.crisp a span{border-bottom:1px solid rgba(107,69,8,.75)}
+/* when the script is running, a tall schedule glides up with the page scroll
+   instead of scrolling inside its own box (two competing scrolls on a phone) */
+.linked .card.crisp{max-height:none;overflow:visible}
 .card.crisp::-webkit-scrollbar{width:5px}
 .card.crisp::-webkit-scrollbar-thumb{background:rgba(122,84,16,.35);border-radius:3px}
 
@@ -832,6 +835,46 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
 
   var bar = document.getElementById('progress'), ticking = false;
 
+  /* Panels whose card is taller than the screen (the schedule on a phone).
+     The panel is lengthened by exactly the overflow, and while it is pinned the
+     card moves up one pixel per pixel scrolled, so it feels like ordinary
+     scrolling: top first, then everything, then the venue, then a short pause. */
+  document.documentElement.classList.add('linked');
+  var PAD = 16, tall = [];
+  panels.forEach(function(p){
+    var card = p.querySelector('.card.crisp');
+    if(card) tall.push({p:p, stick:p.querySelector('.stick'), card:card, extra:0, travel:0});
+  });
+  function measure(){
+    var vh = innerHeight;
+    tall.forEach(function(t){
+      var sh = t.stick.clientHeight || vh;
+      t.extra = Math.max(0, t.card.offsetHeight - sh + PAD*2);
+      if(t.extra > 0){
+        t.travel = t.extra + vh*0.5;
+        t.p.style.height = (vh + t.travel) + 'px';
+      } else {
+        t.travel = 0;
+        t.p.style.height = '';
+      }
+    });
+  }
+  function glide(p, pin){
+    for(var k=0;k<tall.length;k++){
+      var t = tall[k];
+      if(t.p !== p || t.extra <= 0) continue;
+      var moved = clamp(pin * t.travel, 0, t.extra);
+      return t.extra/2 - moved;
+    }
+    return 0;
+  }
+  measure();
+  if('ResizeObserver' in window){
+    var ro = new ResizeObserver(function(){ measure(); frame(); });
+    tall.forEach(function(t){ ro.observe(t.card); });
+  }
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ measure(); frame(); });
+
   function frame(){
     ticking = false;
     var h = innerHeight, max = document.body.scrollHeight - h;
@@ -855,7 +898,8 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
       if(hold){
         var out = pin > 0.86 ? (pin - 0.86) / 0.14 : 0;
         hold.style.opacity = 1 - out;
-        hold.style.transform = reduce ? '' : 'translate3d(0,'+(-out*22).toFixed(1)+'px,0)';
+        var shift = glide(p, pin);
+        hold.style.transform = 'translate3d(0,'+(shift - (reduce ? 0 : out*22)).toFixed(1)+'px,0)';
       }
     });
     dotEls.forEach(function(d,i){ d.setAttribute('aria-current', i===active ? 'true':'false'); });
@@ -866,7 +910,7 @@ footer{position:relative;z-index:3;padding:40px 20px 52px;text-align:center;back
     else setTimeout(prefetchAll, 2500);
   });
   addEventListener('scroll', function(){ if(!ticking){ ticking=true; requestAnimationFrame(frame); } }, {passive:true});
-  addEventListener('resize', frame);
+  addEventListener('resize', function(){ measure(); frame(); });
   frame();
 
   /* background music: starts on its own, quietly, and unmutes at the first touch */
